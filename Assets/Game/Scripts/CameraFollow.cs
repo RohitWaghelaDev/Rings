@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class CameraFollow : MonoBehaviour
 {
-    [SerializeField] Transform player;
+     public Transform player;
     [SerializeField] float lerpSpeed = 100;
 
     float offsetZ;
@@ -20,14 +20,23 @@ public class CameraFollow : MonoBehaviour
         float zPos = transform.position.z - worldOffset;
         transform.position = new Vector3(transform.position.x, transform.position.y, zPos);
     }
-
     private void Start()
     {
-        offsetZ = player.position.z - transform.position.z;
+       // offsetZ = transform.position.z + player.position.z;
     }
+
 
     void LateUpdate()
     {
+        if (player == null)
+        {
+            if (GameController.Instance.sceneController.playerTransform)
+            {
+                player = GameController.Instance.sceneController.playerTransform;
+                offsetZ = transform.position.z + player.position.z;
+            }
+            return;
+        }
 
         FloatLerp();
 
